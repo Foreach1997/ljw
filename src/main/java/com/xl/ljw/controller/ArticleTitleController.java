@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.xl.ljw.entity.ArticleTitleEntity;
 import com.xl.ljw.service.serviceImpl.ArticleTitleServiceImpl;
 import com.xl.ljw.until.ResultResponse;
+import com.xl.ljw.until.SupportPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,5 +29,12 @@ public class ArticleTitleController {
 
         return ResultResponse.resultResponse(200,"请求成功",articleTitleEntities);
      }
+
+    @GetMapping("/PageArticleTitles")
+    public  Object PageArticleTitles(ArticleTitleEntity articleTitleEntity, SupportPage supportPage){
+
+        return  articleTitleServiceImpl.findAllArticleTitles(articleTitleEntity,supportPage);
+
+    }
 
 }

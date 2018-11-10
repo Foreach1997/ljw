@@ -1,5 +1,6 @@
 package com.xl.ljw.dao;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xl.ljw.entity.ArticleTitleEntity;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Pageable;
@@ -12,9 +13,10 @@ import java.util.List;
 
 public interface ArticleTitleRepository extends JpaRepository<ArticleTitleEntity, Serializable> {
 
-    @Query(value = "select * from article_title order by create_time desc LIMIT 4",nativeQuery = true)
+    @Query(value = "select * from article_title where sign = 0 order by create_time desc LIMIT 4",nativeQuery = true)
     public List<ArticleTitleEntity> findArticleTitleAll();
 
     //List<ArticleTitleEntity> findAll(Example<ArticleTitleEntity> example, Sort sort, Pageable pageable);
-
+    @Query(value = "select a.browse_count as browseCount,count(r.article_id) as replyCount FROM reply AS r,article AS a WHERE r.article_id = ?1",nativeQuery = true)
+    public JSONObject findBrowseAndreplyCount(Integer articleId);
 }

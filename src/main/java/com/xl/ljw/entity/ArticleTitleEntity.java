@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+
 @Entity
 @Table(name = "article_title")
 @Data
@@ -14,10 +15,10 @@ public class ArticleTitleEntity implements Serializable {
 
     /**文章标题id*/
     @Id
-    private  int articleTitleId;
+    private  Integer articleTitleId;
 
     @Column(name = "article_id")
-    private  int articleId;
+    private  Integer articleId;
 
     @Column(name = "article_title")
     private  String articleTitle;
@@ -26,13 +27,13 @@ public class ArticleTitleEntity implements Serializable {
     private  String articleType;
 
     @Column(name = "user_id")
-    private  int userId;
+    private  Integer userId;
 
     @Column(name = "name")
     private  String name;
 
     @Column(name = "del_flag")
-    private  int delFlag;
+    private  Integer delFlag;
 
     @Column(name = "create_time")
     private Date createTime;
@@ -45,5 +46,5 @@ public class ArticleTitleEntity implements Serializable {
 
 
     @Transient
-    private int replyCount;
+    private Integer replyCount;
 }
