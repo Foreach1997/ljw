@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -23,9 +26,11 @@ public class ArticleTitleController {
 
 
      @GetMapping("/ArticleTitles")
-     public  Object findArticleTitles(){
+     public  Object findArticleTitles(HttpServletResponse response, HttpServletRequest request){
 
          List<JSONObject> articleTitleEntities = articleTitleServiceImpl.findArticleTitles();
+
+         System.out.println(request.getSession().getAttribute("name"));
 
         return ResultResponse.resultResponse(200,"请求成功",articleTitleEntities);
      }
