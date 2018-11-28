@@ -15,6 +15,7 @@ public class ArticleTitleEntity implements Serializable {
 
     /**文章标题id*/
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private  Integer articleTitleId;
 
     @Column(name = "article_id")

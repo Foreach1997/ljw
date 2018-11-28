@@ -84,8 +84,8 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
             JSONObject json = new JSONObject();
             JSONObject jsonObject = articleTitleRepository.findBrowseAndreplyCount(entities.getArticleId());
             System.out.println(jsonObject);
-            json.put("replyCount",jsonObject.get("replyCount"));
-            json.put("browseCount",jsonObject.get("browseCount"));
+            json.put("replyCount",jsonObject!=null ? jsonObject.get("replyCount"):0);
+            json.put("browseCount",jsonObject!=null ? jsonObject.get("browseCount"):0);
             json.put("userId",entities.getUserId());
             json.put("name",entities.getName());
 

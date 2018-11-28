@@ -17,6 +17,6 @@ public interface ArticleTitleRepository extends JpaRepository<ArticleTitleEntity
     public List<ArticleTitleEntity> findArticleTitleAll();
 
     //List<ArticleTitleEntity> findAll(Example<ArticleTitleEntity> example, Sort sort, Pageable pageable);
-    @Query(value = "select a.browse_count as browseCount,count(r.article_id) as replyCount FROM reply AS r,article AS a WHERE r.article_id = ?1",nativeQuery = true)
+    @Query(value = "select a.browse_count as browseCount,count(r.article_id) as replyCount FROM reply AS r,article AS a WHERE r.article_id = ?1 GROUP BY a.article_id",nativeQuery = true)
     public JSONObject findBrowseAndreplyCount(Integer articleId);
 }

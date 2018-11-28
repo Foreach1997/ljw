@@ -2,18 +2,20 @@ package com.xl.ljw.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+
 
 @Entity
 @Table(name = "user")
 @Data
-public class UserEntity {
+public class UserEntity implements Serializable {
+
+     private static final long serialVersionUID = 1L;
 
      @Id
+     @GeneratedValue(strategy= GenerationType.IDENTITY)
      private  Integer userId;
 
      @Column(name = "user_name")
@@ -26,13 +28,17 @@ public class UserEntity {
      private  String  name;
 
      @Column(name = "del_flag")
-     private  Integer  delFlag;
+     private  int  delFlag;
 
      @Column(name = "email")
      private  String  email;
 
      @Column(name = "sex")
      private  Integer  sex;
+
+
+     @Column(name = "login_count")
+     private Integer loginCount;
 
      @Column(name = "phone")
      private  String  phone;
@@ -49,13 +55,10 @@ public class UserEntity {
      @Column(name = "role_id")
      private  Integer  roleId;
 
-     @Column(name = "create_time")
-     private Date createTime;
+   /*  @Column(name = "create_time")
+     private Date createTime;*/
 
      @Column(name = "update_time")
      private Date  updateTime;
-
-     @Column(name = "login_count")
-     private Integer loginCount;
 
 }

@@ -2,17 +2,16 @@ package com.xl.ljw.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "connect")
 @Data
-public class ConnectEntity {
+public class ConnectEntity implements Serializable {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int connectId;
 
     @Column(name = "connect")
