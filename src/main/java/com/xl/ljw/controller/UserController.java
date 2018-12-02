@@ -50,10 +50,10 @@ public class UserController {
 
 
     @GetMapping("/checkLogin")
-    public Object test(UserEntity userEntity,HttpServletRequest request,HttpServletResponse response) throws Exception{
-        System.out.println(request.getSession().getAttribute("userId"));
+    public Object checkLogin(UserEntity userEntity,HttpServletRequest request,HttpServletResponse response,HttpSession session) throws Exception{
+        System.out.println("checkLogin   "+request.getSession().getAttribute("userId"));
         Object userId = request.getSession().getAttribute("userId");
-        System.out.println(userId);
+        //System.out.println(userId);
         if (userId==null){
             return ResultResponse.resultResponse(200,"检查是否登录",null);
         }

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setUserPassword(MD5.Md5Until(userEntity.getUserPassword()));
 
         Example<UserEntity> example = Example.of(userEntity);
-
+        HttpSession session =  request.getSession();
         List<UserEntity> user = userRepository.findAll(example);
 
         if (!user.isEmpty()){
@@ -47,11 +47,11 @@ public class UserServiceImpl implements UserService {
             userA.setLoginCount(userA.getLoginCount()+1);
             userRepository.save(userA);
 
-
-            HttpSession session =  request.getSession();
             session.setAttribute("userId",user.get(0).getUserId());
+           // HttpSession session =  request.getSession();
+            //session.setAttribute("userId",1);
             // session.setMaxInactiveInterval(18);
-            System.out.println(request.getSession().getAttribute("userId"));
+            //System.out.println(request.getSession().getAttribute("userId"));
             Cookie cookie = new Cookie("IsFlag","true");
             Cookie sessionId = new Cookie("sessionId",session.getId());
             sessionId.setPath("/");
@@ -85,19 +85,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object qiut(HttpServletRequest request, HttpServletResponse response) {
 
-        System.out.println(request.getSession().getAttribute("userId"));
+        Object userId = request.getSession().getAttribute("userId");
 
-        request.getSession().removeAttribute("userId");
-
-        Cookie cookie = new Cookie("IsFlag","false");
-
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        Cookie A = new Cookie("IsFlag", "false");
-        A.setPath("/");
-        response.addCookie(A);
-        System.out.println("退出成功");
-        return ResultResponse.resultResponse(200,"退出成功",null);
+        if (userId!=null && !"".equals(userId)) {
+            request.getSession().removeAttribute("userId");
+            Cookie cookie = new Cookie("IsFlag", "false");
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            System.out.println("退出成功");
+            return ResultResponse.resultResponse(200,"退出成功",null);
+        }
+        return ResultResponse.resultResponse(300,"退出失败",null);
     }
 }

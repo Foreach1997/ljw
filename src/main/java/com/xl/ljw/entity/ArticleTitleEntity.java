@@ -12,7 +12,7 @@ import java.util.Date;
 @Table(name = "article_title")
 @Data
 public class ArticleTitleEntity implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     /**文章标题id*/
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class ArticleTitleEntity implements Serializable {
     private  String name;
 
     @Column(name = "del_flag")
-    private  Integer delFlag;
+    private  int delFlag;
 
     @Column(name = "create_time")
     private Date createTime;
@@ -45,6 +45,8 @@ public class ArticleTitleEntity implements Serializable {
     @Column(name = "photo")
     private  String photo;
 
+    @Column(name = "sign")
+    private  Integer sign;
 
     @Transient
     private Integer replyCount;

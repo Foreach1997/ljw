@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,7 @@ public class ConnectController {
     private ConnectServiceImpl connectServiceImpl;
 
     @GetMapping("/connectDesc")
-    public Object connect(){
-
+    public Object connect(HttpSession session){
        List<ConnectEntity> list = connectServiceImpl.findAll();
 
        return ResultResponse.resultResponse(200,"请求成功",list);

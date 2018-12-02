@@ -44,7 +44,7 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
            int count = replyRepository.findReplyCount(entities.getArticleId());
 
            jsonObject.put("articleTitleId",entities.getArticleTitleId());
-           jsonObject.put("ArticleId",entities.getArticleId());
+           jsonObject.put("articleId",entities.getArticleId());
            jsonObject.put("articleTitle",entities.getArticleTitle());
            jsonObject.put("articleType",entities.getArticleType());
            jsonObject.put("userId",entities.getUserId());
@@ -91,7 +91,7 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
 
                 json.put("createTime",format.format(entities.getCreateTime()));
 
-            json.put("ArticleId",entities.getArticleId());
+            json.put("articleId",entities.getArticleId());
             json.put("articleTitle",entities.getArticleTitle());
             json.put("articleTitleId",entities.getArticleTitleId());
             json.put("articleType",entities.getArticleType());
@@ -100,4 +100,7 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
         System.out.println(count);
         return ResultResponse.result(200,"请求成功",list,count);
     }
+
+
+
 }

@@ -50,7 +50,7 @@ public class UserEntity implements Serializable {
      private  String  password;
 
      @Column(name = "reply")
-     private  String  reply;
+     private  Integer  reply;
 
      @Column(name = "role_id")
      private  Integer  roleId;

@@ -14,4 +14,5 @@ public interface ArticleTitleService {
 
     /**按需获得所有文章*/
     public Object findAllArticleTitles(ArticleTitleEntity articleTitleEntity, SupportPage supportPage);
+
 }
