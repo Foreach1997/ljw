@@ -43,4 +43,23 @@ public class ArticleTitleController {
 
     }
 
+    @GetMapping("/findHostArticleTitle")
+    public  Object findHostArticleTitle(){
+         return articleTitleServiceImpl.findHostArticleTitle();
+    }
+
+    @GetMapping("/userArticleTitle")
+    public  Object findUserArticleTitle(Integer userId,SupportPage supportPage){
+         return  articleTitleServiceImpl.findUserArticleTitle(userId,supportPage);
+
+    }
+
+    @PostMapping("/delUserArticleTitle")
+    public Object delUserArticle(){
+
+         return "";
+    }
+
+
+
 }

@@ -13,4 +13,7 @@ public interface ReplyUserRepository  extends JpaRepository<ReplyUserEntity, Ser
 
    public List<ReplyUserEntity> findByReplyIdAndDelFlag(Integer replyId,Integer delFlag,Sort sort);
 
+
+   @Query("update ReplyUserEntity set photo = ?1,name = ?3 where userId = ?2")
+   public int updatePhotoAndName(String photo,Integer userId,String name);
 }

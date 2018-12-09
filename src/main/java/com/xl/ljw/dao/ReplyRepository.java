@@ -13,4 +13,7 @@ public interface ReplyRepository extends JpaRepository<ReplyEntity, Serializable
     @Query(value = "select count(*) from reply where article_id = ?1",nativeQuery = true)
     int findReplyCount(Integer articleId);
 
+    @Query("update ReplyEntity set photo = ?1,name = ?3 where userId = ?2")
+    public int updatePhotoAndName(String photo,Integer userId,String name);
+
 }

@@ -9,7 +9,7 @@ import lombok.Data;
 public class SupportPage {
 
     //当前页
-    private  Integer currentPage;
+    private  Integer currentPage = 1;
 
     //页码大小
     private  Integer PageSize;

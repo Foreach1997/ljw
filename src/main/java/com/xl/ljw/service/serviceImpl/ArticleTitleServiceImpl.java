@@ -2,9 +2,11 @@ package com.xl.ljw.service.serviceImpl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xl.ljw.dao.ArticleRepository;
 import com.xl.ljw.dao.ArticleTitleRepository;
 import com.xl.ljw.dao.ReplyRepository;
 import com.xl.ljw.entity.ArticleTitleEntity;
+import com.xl.ljw.entity.CommunicationEntity;
 import com.xl.ljw.service.ArticleTitleService;
 import com.xl.ljw.until.ResultResponse;
 import com.xl.ljw.until.SupportPage;
@@ -26,6 +28,9 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
 
     @Autowired
     private ArticleTitleRepository articleTitleRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Autowired
     private ReplyRepository replyRepository;
@@ -84,8 +89,8 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
             JSONObject json = new JSONObject();
             JSONObject jsonObject = articleTitleRepository.findBrowseAndreplyCount(entities.getArticleId());
             System.out.println(jsonObject);
-            json.put("replyCount",jsonObject!=null ? jsonObject.get("replyCount"):0);
-            json.put("browseCount",jsonObject!=null ? jsonObject.get("browseCount"):0);
+            json.put("replyCount",jsonObject!=null ? jsonObject.getInteger("replyCount"):0);
+            json.put("browseCount",jsonObject!=null ? jsonObject.getInteger("browseCount"):0);
             json.put("userId",entities.getUserId());
             json.put("name",entities.getName());
 
@@ -101,6 +106,40 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
         return ResultResponse.result(200,"请求成功",list,count);
     }
 
+    @Override
+    public Object findHostArticleTitle() {
+      List<JSONObject> jsonObjects = articleTitleRepository.findHostArticleTitle();
+      return ResultResponse.resultResponse(200,"请求成功",jsonObjects);
+    }
 
+    @Override
+    public Object findUserArticleTitle(Integer userId,SupportPage supportPage) {
 
+        Pageable pageable = PageRequest.of(supportPage.getCurrentPage()-1,5, Sort.by(Sort.Order.desc("createTime")));
+
+        List<ArticleTitleEntity> articleTitleEntities = articleTitleRepository.findByUserIdAndDelFlag(userId,0,pageable);
+
+        List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
+
+        for (ArticleTitleEntity articleTitleEntity : articleTitleEntities){
+            JSONObject jsonObject = new JSONObject();
+
+            jsonObject.put("createTime",format.format(articleTitleEntity.getCreateTime()));
+            jsonObject.put("articleId",articleTitleEntity.getArticleTitleId());
+            jsonObject.put("articleTitle",articleTitleEntity.getArticleTitle());
+            jsonObjects.add(jsonObject);
+        }
+
+        return ResultResponse.resultResponse(200,"请求成功",jsonObjects);
+    }
+
+    @Override
+    public Object delUserArticleTitle(Integer articleId) {
+
+        articleTitleRepository.updateUserArticleTitle(articleId);
+
+        articleRepository.updateUserArticleTitle(articleId);
+
+        return ResultResponse.resultResponse(200,"请求成功",null);
+    }
 }
