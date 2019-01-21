@@ -10,4 +10,7 @@ public interface ReplyService {
 
     /**回复该文章*/
    public Object saveReply(ReplyEntity replyEntity);
+
+   /**自己回复*/
+   public Object findUserReply(Integer userId);
 }

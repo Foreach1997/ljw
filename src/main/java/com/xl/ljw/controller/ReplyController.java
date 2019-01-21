@@ -30,4 +30,9 @@ public class ReplyController {
         return replyServiceImpl.saveReply(replyEntity);
     }
 
+    @GetMapping("/findUserReply")
+    public Object findUserReply(Integer userId){
+        return  replyServiceImpl.findUserReply(userId);
+    }
+
 }

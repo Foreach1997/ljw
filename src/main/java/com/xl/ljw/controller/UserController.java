@@ -8,6 +8,7 @@ import com.xl.ljw.until.ResultResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -28,6 +29,7 @@ public class UserController {
     @Autowired
     private SessionUtil sessionUtil;
 
+
     @PostMapping("/login")
     public Object Login(UserEntity userEntity, HttpServletRequest request,HttpServletResponse response){
      return  userServiceImpl.userLogin(userEntity,request,response);
@@ -37,6 +39,11 @@ public class UserController {
     public Object reg(UserEntity userEntity){
         int val =  userServiceImpl.userReg(userEntity);
         if (val>0){
+            if (val==2){
+                return ResultResponse.resultResponse(210,"该账号已存在",null);
+            }else if (val==5){
+                return ResultResponse.resultResponse(210,"请输入用户名",null);
+            }
         return ResultResponse.resultResponse(200,"注册成功",null);
         }
         return ResultResponse.resultResponse(250,"注册失败",null);
@@ -66,12 +73,9 @@ public class UserController {
         return  userServiceImpl.findVisitor();
     }
 
-    @PostMapping("")
-    public Object updatePhoto(){
-
-        return "";
-
-
+    @PostMapping("/updatePhoto")
+    public Object updatePhoto(MultipartFile file,UserEntity userEntity){
+        return userServiceImpl.updatePhoto(file,userEntity);
     }
 
 

@@ -1,5 +1,6 @@
 package com.xl.ljw.service.serviceImpl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xl.ljw.dao.ReplyRepository;
 import com.xl.ljw.dao.ReplyUserRepository;
 import com.xl.ljw.dao.UserRepository;
@@ -9,6 +10,7 @@ import com.xl.ljw.entity.UserEntity;
 import com.xl.ljw.service.ReplyService;
 import com.xl.ljw.until.ResultResponse;
 import com.xl.ljw.until.SupportPage;
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -63,6 +66,24 @@ public class ReplyServiceImpl implements ReplyService {
         replyEntity.setCreateTime(format.format(new Date()));
         replyRepository.save(replyEntity);
         return ResultResponse.resultResponse(200,"回复成功",null);
+    }
+
+    @Override
+    public Object findUserReply(Integer userId) {
+        List<JSONObject> replyEntities = replyRepository.findByUserIdAndDelFlag(userId);
+
+        /*List<JSONObject> jsObjects = new ArrayList<JSONObject>();
+
+        for (ReplyEntity replyEntity:replyEntities){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("replyId",replyEntity.getReplyId());
+            jsonObject.put("text",replyEntity.getText());
+            jsonObject.put("name",replyEntity.getName());
+            jsonObject.put("createTime",replyEntity.getCreateTime());
+            jsonObject.put("articleId",replyEntity.getArticleId());
+            jsObjects.add(jsonObject);
+        }*/
+        return ResultResponse.resultResponse(200,"请求成功",replyEntities);
     }
 
 

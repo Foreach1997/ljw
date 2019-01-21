@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Query;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,10 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -51,6 +47,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ReplyUserRepository replyUserRepository;
+
+    @Autowired
+    private UserArticleReplyRepository userArticleReplyRepository;
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -94,22 +93,30 @@ public class UserServiceImpl implements UserService {
 
             return ResultResponse.resultResponse(200,"登陆成功",jsonObject);
         }else {
-            return ResultResponse.resultResponse(250,"登陆失败",null);
+            return ResultResponse.resultResponse(250,"请检查用户名或密码",null);
         }
     }
 
     @Override
     public int userReg(UserEntity userEntity) {
-        userEntity.setPhoto(SystemContent.photo);
-        userEntity.setSex(1);
-        userEntity.setLoginCount(0);
-        userEntity.setUserPassword(MD5.Md5Until(userEntity.getPassword()));
-        try {
-            userRepository.save(userEntity);
-            return 1;
-        }catch (Exception e){
-            return 0;
+
+        String userName = userRepository.findByUserName(userEntity.getUserName());
+        if ("".equals(userEntity.getUserName()) || userEntity.getUserName()==null){
+            return 5;
         }
+        if (!userEntity.getUserName().equals(userName)) {
+            userEntity.setPhoto(SystemContent.photo);
+            userEntity.setSex(1);
+            userEntity.setLoginCount(0);
+            userEntity.setUserPassword(MD5.Md5Until(userEntity.getPassword()));
+            try {
+                userRepository.save(userEntity);
+                return 1;
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+        return 2;
     }
 
     @Override
@@ -132,15 +139,16 @@ public class UserServiceImpl implements UserService {
     public Object findVisitor() {
         Pageable pageable = PageRequest.of(0,16, Sort.by(Sort.Order.desc("loginTime")));
 
-        List<UserEntity> userEntities = userRepository.findAll(pageable).getContent();
+        List<JSONObject> userEntities = userRepository.findAllVisitor();
 
         List<JSONObject> userEntityList = new ArrayList<JSONObject>();
-        for (UserEntity user:userEntities){
+        for (JSONObject user:userEntities){
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name",user.getName());
-            jsonObject.put("photo",user.getPhoto());
-            jsonObject.put("loginCount",user.getLoginCount());
-            jsonObject.put("loginTime",format.format(user.getLoginTime()));
+            jsonObject.put("name",user.getString("name"));
+            jsonObject.put("photo",user.getString("photo"));
+            jsonObject.put("loginCount",user.getInteger("login_count"));
+            jsonObject.put("loginTime",format.format(user.getDate("login_time")));
+            jsonObject.put("userId",user.getInteger("user_id"));
             userEntityList.add(jsonObject);
         }
         return ResultResponse.resultResponse(200,"请求成功",userEntityList);
@@ -150,7 +158,7 @@ public class UserServiceImpl implements UserService {
     public Object updatePhoto(MultipartFile file, UserEntity userEntity) {
         String path = "/www/tom/apache-tomcat-8.5.35/webapps/img";
         //String path = "D://BaiduNetdiskDownload//Vue";
-        String name = file.getOriginalFilename();
+        String name = UUID.randomUUID().toString() +file.getOriginalFilename();
         System.out.println(name);
         System.out.println(file.getName());
         File newPath = new File(path,name);
@@ -173,19 +181,32 @@ public class UserServiceImpl implements UserService {
         }
 
         String photo = "/img/"+name;
-        String userName = userEntity.getUserName();
+        String userName = userEntity.getName();
         Integer userId = userEntity.getUserId();
-        String  password= userEntity.getUserPassword();
+        String  password= userEntity.getPassword();
         String userPassword = MD5.Md5Until(userEntity.getUserPassword());
+        UserEntity  user = userRepository.getByUserIdAndDelFlag(userId,0);
+        try {
+        if (!userPassword.equals(user.getUserPassword())){
         articleRepository.updatePhotoAndName(photo,userId);
         articleTitleRepository.updatePhotoAndName(photo,userId,userName);
         userRepository.updatePhotoAndName(photo,userId,userName,password,userPassword);
         replyRepository.updatePhotoAndName(photo,userId,userName);
         communicationRepository.updatePhotoAndName(userId,userName);
         replyUserRepository.updatePhotoAndName(photo,userId,userName);
+        userArticleReplyRepository.updatePhotoAndName(photo,userId,userName);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("src","/img/"+name);
         jsonObject.put("title",name);
+        jsonObject.put("name",userName);
+        jsonObject.put("photo",photo);
         return ResultResponse.resultResponse(0,"上传成功",jsonObject);
+        }else {
+            return ResultResponse.resultResponse(250,"请勿输入与上次一样的密码",null);
+
+            }
+        }catch (Exception ex){
+            return ResultResponse.resultResponse(300,"上传失败",null);
+        }
     }
 }

@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -91,7 +92,7 @@ public class ArticleServiceImpl implements ArticleService {
     public Object uploadPhoto(MultipartFile file) {
         String path = "/www/tom/apache-tomcat-8.5.35/webapps/img";
         //String path = "D://BaiduNetdiskDownload//Vue";
-        String name = file.getOriginalFilename();
+        String name = UUID.randomUUID().toString()+file.getOriginalFilename();
         System.out.println(name);
         System.out.println(file.getName());
         File newPath = new File(path,name);

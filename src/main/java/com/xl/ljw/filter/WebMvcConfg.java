@@ -9,6 +9,12 @@ public class WebMvcConfg implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-       registry.addInterceptor(new MyHandlerInterceptor()).addPathPatterns("/user/test");
+       registry.addInterceptor(new MyHandlerInterceptor()).addPathPatterns("/userArticleReply/saveUserArticleReply")
+               .addPathPatterns("/replyUser/saveReplyUser")
+               .addPathPatterns("/reply/saveReply")
+               .addPathPatterns("/communication/saveCommunication")
+               .addPathPatterns("/ArticleTitle/delUserArticleTitle")
+               .addPathPatterns("/article/report")
+               .addPathPatterns("/userArticle/saveUserArticle");
     }
 }

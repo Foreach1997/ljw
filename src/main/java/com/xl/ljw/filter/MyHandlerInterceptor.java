@@ -21,7 +21,7 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
         boolean flag = false;
        Object userId = request.getSession().getAttribute("userId");
         System.out.println(userId);
-        if(userId==null &&  "".equals(userId)) {
+        if(userId==null ||  "".equals(userId)) {
             Cookie A = new Cookie("IsFlag", "false");
             A.setPath("/");
             response.addCookie(A);

@@ -11,7 +11,7 @@ public class MD5 {
     }
 
     public static void main(String[] args) {
-     String key =  Md5Until("123123");
+     String key =  Md5Until("luo520");
         System.out.println(key);
         System.out.println(key.equals(Md5Until("qweqweqwe")));
     }

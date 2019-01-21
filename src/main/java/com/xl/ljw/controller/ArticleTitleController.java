@@ -55,9 +55,9 @@ public class ArticleTitleController {
     }
 
     @PostMapping("/delUserArticleTitle")
-    public Object delUserArticle(){
+    public Object delUserArticle(Integer articleId){
 
-         return "";
+        return  articleTitleServiceImpl.delUserArticleTitle(articleId);
     }
 
 

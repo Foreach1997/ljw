@@ -77,8 +77,8 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
         Example<ArticleTitleEntity> example = Example.of(articleTitleEntity);
         List<ArticleTitleEntity> articleTitleEntities = null;
         if (articleTitleEntity.getArticleType()==null||"".equals(articleTitleEntity.getArticleType())) {
-            articleTitleEntities = articleTitleRepository.findAll(pageable).getContent();
-            count = articleTitleRepository.findAll().size();
+            articleTitleEntities = articleTitleRepository.findByDelFlag(0,pageable);
+            count = articleTitleRepository.findAllArticleTitleCount();
         }else {
             articleTitleEntities = articleTitleRepository.findAll(example, pageable).getContent();
             count = articleTitleRepository.findAll(example).size();
@@ -93,7 +93,7 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
             json.put("browseCount",jsonObject!=null ? jsonObject.getInteger("browseCount"):0);
             json.put("userId",entities.getUserId());
             json.put("name",entities.getName());
-
+            json.put("photo",entities.getPhoto());
                 json.put("createTime",format.format(entities.getCreateTime()));
 
             json.put("articleId",entities.getArticleId());
@@ -119,18 +119,20 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
 
         List<ArticleTitleEntity> articleTitleEntities = articleTitleRepository.findByUserIdAndDelFlag(userId,0,pageable);
 
-        List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
+        int count = articleTitleRepository.findByUserIdAndDelFlag(userId,0).size();
+
+         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
 
         for (ArticleTitleEntity articleTitleEntity : articleTitleEntities){
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("createTime",format.format(articleTitleEntity.getCreateTime()));
-            jsonObject.put("articleId",articleTitleEntity.getArticleTitleId());
+            jsonObject.put("articleId",articleTitleEntity.getArticleId());
             jsonObject.put("articleTitle",articleTitleEntity.getArticleTitle());
             jsonObjects.add(jsonObject);
         }
 
-        return ResultResponse.resultResponse(200,"请求成功",jsonObjects);
+        return ResultResponse.result(200,"请求成功",jsonObjects,count);
     }
 
     @Override
