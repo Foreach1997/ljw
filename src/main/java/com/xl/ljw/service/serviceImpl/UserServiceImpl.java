@@ -156,8 +156,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Object updatePhoto(MultipartFile file, UserEntity userEntity) {
-        String path = "/www/tom/apache-tomcat-8.5.35/webapps/img";
+        //String path = "/www/tom/apache-tomcat-8.5.35/webapps/img";
         //String path = "D://BaiduNetdiskDownload//Vue";
+        String path = SystemContent.IMG_ADDRESS;
         String name = UUID.randomUUID().toString() +file.getOriginalFilename();
         System.out.println(name);
         System.out.println(file.getName());
@@ -180,7 +181,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        String photo = "/img/"+name;
+        String photo = SystemContent.HTTP_ADDRESS+"/img/"+name;
         String userName = userEntity.getName();
         Integer userId = userEntity.getUserId();
         String  password= userEntity.getPassword();
@@ -196,7 +197,7 @@ public class UserServiceImpl implements UserService {
         replyUserRepository.updatePhotoAndName(photo,userId,userName);
         userArticleReplyRepository.updatePhotoAndName(photo,userId,userName);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("src","/img/"+name);
+        jsonObject.put("src",SystemContent.HTTP_ADDRESS+"/img/"+name);
         jsonObject.put("title",name);
         jsonObject.put("name",userName);
         jsonObject.put("photo",photo);

@@ -5,6 +5,7 @@ import com.xl.ljw.dao.*;
 import com.xl.ljw.entity.*;
 import com.xl.ljw.service.ArticleService;
 import com.xl.ljw.until.ResultResponse;
+import com.xl.ljw.until.SystemContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -90,8 +91,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Object uploadPhoto(MultipartFile file) {
-        String path = "/www/tom/apache-tomcat-8.5.35/webapps/img";
-        //String path = "D://BaiduNetdiskDownload//Vue";
+        //String path = "/www/tom/apache-tomcat-8.5.35/webapps/img";
+        String path = SystemContent.IMG_ADDRESS;
         String name = UUID.randomUUID().toString()+file.getOriginalFilename();
         System.out.println(name);
         System.out.println(file.getName());
@@ -114,7 +115,7 @@ public class ArticleServiceImpl implements ArticleService {
            }
        }
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("src","/img/"+name);
+        jsonObject.put("src",SystemContent.HTTP_ADDRESS+"/img/"+name);
         jsonObject.put("title",name);
         return ResultResponse.resultResponse(0,"上传成功",jsonObject);
     }

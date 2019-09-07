@@ -20,8 +20,11 @@ public interface ArticleTitleRepository extends JpaRepository<ArticleTitleEntity
 
     public List<ArticleTitleEntity> findByDelFlag(Integer delFlag,Pageable pageable);
     //List<ArticleTitleEntity> findAll(Example<ArticleTitleEntity> example, Sort sort, Pageable pageable);
-    @Query(value = "select a.browse_count as browseCount,count(r.article_id) as replyCount FROM reply AS r,article AS a WHERE a.article_id = ?1 AND  r.article_id = a.article_id",nativeQuery = true)
-    public JSONObject findBrowseAndreplyCount(Integer articleId);
+    @Query(value = "select count(r.article_id) as replyCount FROM reply AS r WHERE r.article_id = ?1 ",nativeQuery = true)
+    public int findReplyCount(Integer articleId);
+
+    @Query(value = "select a.browse_count AS browseCount FROM article AS a WHERE a.article_id = ?1 ",nativeQuery = true)
+    public int findBrowseCount(Integer articleId);
 
     @Query(value = "SELECT COUNT( r.article_id ) AS replyCount,a.article_title as articleTitle,a.article_id as articleId FROM article_title AS a,reply AS r WHERE a.article_id = r.article_id  AND a.del_flag = 0 AND r.del_flag = 0 GROUP BY a.article_id ORDER BY COUNT( r.article_id )  DESC LIMIT 8",nativeQuery = true)
     public List<JSONObject> findHostArticleTitle();

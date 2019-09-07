@@ -87,10 +87,13 @@ public class ArticleTitleServiceImpl implements ArticleTitleService {
         List<JSONObject> list = new ArrayList<JSONObject>();
         for (ArticleTitleEntity entities : articleTitleEntities){
             JSONObject json = new JSONObject();
-            JSONObject jsonObject = articleTitleRepository.findBrowseAndreplyCount(entities.getArticleId());
-            System.out.println(jsonObject);
-            json.put("replyCount",jsonObject!=null ? jsonObject.getInteger("replyCount"):0);
-            json.put("browseCount",jsonObject!=null ? jsonObject.getInteger("browseCount"):0);
+            int replyCount = articleTitleRepository.findReplyCount(entities.getArticleId());
+            int browseCount = articleTitleRepository.findBrowseCount(entities.getArticleId());
+            //System.out.println(jsonObject);
+            //json.put("replyCount",jsonObject!=null ? jsonObject.getInteger("replyCount"):0);
+            //json.put("browseCount",jsonObject!=null ? jsonObject.getInteger("browseCount"):0);
+            json.put("replyCount",replyCount);
+            json.put("browseCount",browseCount);
             json.put("userId",entities.getUserId());
             json.put("name",entities.getName());
             json.put("photo",entities.getPhoto());
